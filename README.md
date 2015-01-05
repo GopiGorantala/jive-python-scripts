@@ -9,6 +9,6 @@ I love python and so end up writing a scripts to perform actions on jive using r
 I have tried to put some of those random scripts in this repo and will keep updating.
 
 I have done some random refactoring on the script before checkin as some of these were writen an year back.
-So if they give an error, do let me know. Coz I have not tested every refactored method in the code, but the concept behind each action is still valid.
+So if they give an error, do let me know. Coz I have not tested every refactored method while checkin, but have run it sometime back on our prod instance. The concept behind each action is still valid.
 
 Feel free to use these to understand jive rest apis and debug jive issues on your instance.
