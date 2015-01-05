@@ -1,7 +1,7 @@
 jive-python-scripts
 ===================
 
-Python scripts to perform several admin tasks on jive via jive rest apis
+Python scripts to perform several admin tasks on jive via jive v3 REST apis
 
 As a Jive developer and admin, I have to perform several tasks to debug issues on our internal jive instance, or run spikes to test rest apis for a jive app to be developed.
 I love python and so end up writing a scripts to perform actions on jive using rest apis.
