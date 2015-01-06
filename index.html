@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Jive-python-scripts by shahpawan</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Jive-python-scripts</h1>
+        <p class="header">Python scripts to perform several admin tasks on jive via jive rest apis</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/shahpawan/jive-python-scripts/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/shahpawan/jive-python-scripts/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/shahpawan/jive-python-scripts">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/shahpawan">shahpawan</a></p>
+
+
+      </header>
+      <section>
+        <h1>
+<a id="jive-python-scripts" class="anchor" href="#jive-python-scripts" aria-hidden="true"><span class="octicon octicon-link"></span></a>jive-python-scripts</h1>
+
+<p>Python scripts to perform several admin tasks on jive via jive v3 REST apis</p>
+
+<p>As a Jive developer and admin, I have to perform several tasks to debug issues on our internal jive instance, or run spikes to test rest apis for a jive app to be developed.
+I love python and so end up writing a scripts to perform actions on jive using rest apis.</p>
+
+<p>I have tried to put some of those random scripts in this repo and will keep updating.</p>
+
+<p>I have done some random refactoring on the script before checkin as some of these were writen an year back.
+So if they give an error, do let me know. Coz I have not tested every refactored method while checkin, but have run it sometime back on our prod instance. The concept behind each action is still valid.</p>
+
+<p>Feel free to use these to understand jive rest apis and debug jive issues on your instance.</p>
+
+<p><strong>Scripts contain following Jive actions:</strong></p>
+
+<ul>
+<li>Endorse expertise for a user</li>
+<li>Associate a group with user's stream (follow group)</li>
+<li>Add user as member to a group</li>
+<li>Force users to follow a group in email watches stream (if present. this was for our custom streamonce)</li>
+<li>Get group followers</li>
+<li>Get group members</li>
+<li>Delete membership</li>
+<li>Check streams and receive emails status of each stream of a user</li>
+<li>Create a new stream for user</li>
+<li>Get all jive system properties</li>
+<li>Create jive system properties</li>
+<li>Destroy jive system properties</li>
+<li>Get all groups on jive instance</li>
+<li>Get all private and secret groups</li>
+<li>remove all users from a group</li>
+<li>Get user photos / avatars</li>
+<li>Download all content of a group in pdf format</li>
+<li>Get groups owned by a user</li>
+<li>Send direct message</li>
+</ul>
+
+<p>Though jive cloud admin console does not have system property view, the above mentioned action related to system properties work via jive rest API on cloud too</p>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
