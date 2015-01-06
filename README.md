@@ -34,6 +34,7 @@ Feel free to use these to understand jive rest apis and debug jive issues on you
 - Download all content of a group in pdf format
 - Get groups owned by a user
 - Send direct message
+- Run-as-feature
  
 Though jive cloud admin console does not have system property view, the above mentioned action related to system properties work via jive rest API on cloud too
 
