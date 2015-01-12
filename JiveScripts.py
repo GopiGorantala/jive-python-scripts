@@ -58,8 +58,10 @@ class JiveManager:
     def __put(self, url, params):
         try:
             header = {'content-type': 'application/json'}
-            response = requests.put(url, data=params, headers=header, auth=(self.jiveUsername, self.jivePassword))
-            print response
+            jive_response = requests.put(url, data=params, headers=header, auth=(self.jiveUsername, self.jivePassword))
+            jive_response = re.sub('\A.*[;]', "", jive_response.text).encode('utf8', 'ignore')
+            json_response = json.loads(jive_response)
+            print json_response
         except Exception as e:
             print e
             raise e
@@ -288,12 +290,14 @@ class JiveManager:
             print self.__delete(delete_prop_url)
 
     def get_all_groups(self):
-        next_url = self.jiveApiBaseUrl + "places?filter=type(group)"
+        groupList = []
+        next_url = self.jiveApiBaseUrl + "places?filter=type(group)&count=100&startIndex=0"
         while next_url:
             groups_resp = self.__get(next_url)
             for group in groups_resp["list"]:
-                print group["placeID"] + "," + group["id"] + "," + group["displayName"]
+                groupList.append(group["placeID"] + "," + group["id"] + "," + group["displayName"]);
             next_url = self.__next_page_url(groups_resp)
+        return groupList;
 
     def get_all_private_and_secret_groups(self):
         next_url = self.jiveApiBaseUrl+"places?filter=type(group)"
@@ -399,4 +403,20 @@ class JiveManager:
         dmsUrl = self.jiveApiBaseUrl + "dms";
         data = '{ "content": { "text": "aero"},"participants": [ "api/core/v3/people/'+userId+'" ],"subject":"coffee."}'
         print self.__post(dmsUrl, data)
+
+    def disable_user(self, userId):
+        person_url = self.jiveApiBaseUrl + 'people/' + userId
+        personData = self.__get(person_url)
+        print personData["jive"]["enabled"]
+        personData["jive"]["enabled"] = False
+        print self.__put(person_url, personData)
+
+    def get_group_list_with_latest_activity(self):
+        for group in self.get_all_groups():
+            group_activities = self.__get(self.jiveApiBaseUrl+"places/"+group[0]+"/activities")
+            try:
+                print group[2]+","+group_activities["list"][0]["updated"]
+            except Exception, e:
+                print group[2]+","+ str(e)
+                continue
 
