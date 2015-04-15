@@ -160,8 +160,8 @@ class JiveManager:
         post_data = '{"person":"' + user_url + '","state" : "member"}'
         print self.__post(group_member_service_url, post_data)
 
-    def force_add_users(self):
-        group_id = '16734'
+    def force_add_users(self, group_id):
+        
         group_place_service_url = self.jiveApiBaseUrl + 'places/' + group_id
         group_member_service_url = self.jiveApiBaseUrl + 'members/places/' + group_id
 
