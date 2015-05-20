@@ -409,6 +409,7 @@ class JiveManager:
         personData = self.__get(person_url)
         print personData["jive"]["enabled"]
         personData["jive"]["enabled"] = False
+        personData = json.dumps(personData)
         print self.__put(person_url, personData)
 
     def get_group_list_with_latest_activity(self):
