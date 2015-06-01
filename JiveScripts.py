@@ -239,7 +239,7 @@ class JiveManager:
                                 streamName = "Communications"
                             else:
                                 streamName = stream["name"]
-                            print "StreamName : "+streamName+", receiveEmail : "+stream['receiveEmails']
+                            print "StreamName : "+streamName+", receiveEmail : "+str(stream['receiveEmails'])
 
                         except Exception, e:
                             print "Error on streams data"
