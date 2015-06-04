@@ -421,3 +421,13 @@ class JiveManager:
                 print group[2]+","+ str(e)
                 continue
 
+    def search_group(self, group_name):
+        group_search_url = self.jiveApiBaseUrl+"places?filter=search("+group_name+")";
+        while group_search_url:
+            groups = self.__get(group_search_url)
+            print groups
+            for group in groups["list"]:
+                if group["displayName"] == group_name:
+                    return group
+            group_search_url = self.__next_page_url(groups)
+
