@@ -434,6 +434,6 @@ class JiveManager:
     def create_content_in_place(self, placeId):
         url = self.jiveApiBaseUrl+"places/"+placeId+"/contents"
         dat = '{"content":{"type": "text/html","text": "<body><p>Some interesting content</p></body>"},"subject": "New Document","type": "document"}'
-        print self.post_json(url, dat)
+        print self.__post(url, dat)
 
 
