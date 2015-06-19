@@ -430,4 +430,10 @@ class JiveManager:
                 if group["displayName"] == group_url_name:
                     return group
             group_search_url = self.__next_page_url(groups)
+    
+    def create_content_in_place(self, placeId):
+        url = self.jiveApiBaseUrl+"places/"+placeId+"/contents"
+        dat = '{"content":{"type": "text/html","text": "<body><p>Some interesting content</p></body>"},"subject": "New Document","type": "document"}'
+        print self.post_json(url, dat)
+
 
