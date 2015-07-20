@@ -206,9 +206,9 @@ class JiveManager:
             try:
                 resp = self.__get(next_url)
 
-                for usr in resp["list"]:
-                    print usr["id"]
-                    memberIds.append(usr["id"])
+                for membership in resp["list"]:
+                    print membership["person"]["id"]
+                    memberIds.append(membership["person"]["id"])
             except Exception, e:
                 print e
             next_url = self.__next_page_url(resp)
