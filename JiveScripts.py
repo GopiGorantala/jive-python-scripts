@@ -436,4 +436,12 @@ class JiveManager:
         dat = '{"content":{"type": "text/html","text": "<body><p>Some interesting content</p></body>"},"subject": "New Document","type": "document"}'
         print self.__post(url, dat)
 
+    def update_group(self, group_id):
+        group_uri = self.jiveApiBaseUrl+"places/"+group_id
+        group = self.__get(group_uri)
+        group["groupType"] = "SECRET"
+        self.__put(group_uri, json.dumps(group))
+
+
+
 
