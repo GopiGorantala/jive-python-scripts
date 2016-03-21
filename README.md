@@ -39,6 +39,15 @@ Feel free to use these to understand jive rest apis and debug jive issues on you
 - Get groups owned by a user
 - Send direct message
 - Run-as-feature
- 
+- Disable user
+- Get list of groups with their latest activity
+- Search group by url name
+- Create content in place
+- Update group
+- Get delete group object
+- Create static
+- Remove all associations of  group with a user (streams)
+- Update user
+
 Though jive cloud admin console does not have system property view, the above mentioned action related to system properties work via jive rest API on cloud too
 
