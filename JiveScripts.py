@@ -411,6 +411,25 @@ class JiveManager:
         group["groupType"] = "SECRET"
         self.__put(group_uri, json.dumps(group))
 
+    def get_deleted_group_objects(self):
+        url = self.jiveApiBaseUrl+"deletedObjects/places"
+        self.__get(url)
 
+    def create_static(self, placeUrl, fileName):
+        url = self.jiveApiBaseUrl+"statics"
+        filename = fileName
+        placeUrl = placeUrl
+        post_json = '{"filename":"'+filename+'","placeURI":"'+placeUrl+'"}';
+        self.__post(url, post_json)
 
+    def remove_all_associations_of_user_with_group(self, username, groupInternalId):
+        streams = self.get_all_stream_ids_for_user(username)
+        for stream in streams:
+            self.__delete(stream["id"], groupInternalId)
 
+    def update_user(self, username):
+        person_url = self.jiveApiBaseUrl + 'people/username/'+username
+        person = self.__get(person_url)
+        person['jive']['profile']['Title'] = "Some Title"
+        person = json.dumps(person)
+        self.__put(person_url, person)
