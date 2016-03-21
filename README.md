@@ -2,7 +2,9 @@ jive-python-scripts
 ===================
 
 Python scripts to perform several admin tasks on jive via jive v3 REST apis
+
 Recommended Python version : 3.5.1
+
 Note : This script originally was meant for 2.7. I have now moved all to python v3.5.1. If you find something not working with the new version, let me know. I will push the fixes soon
 
 As a Jive developer and admin, I have to perform several tasks to debug issues on our internal jive instance, or run spikes to test rest apis for a jive app to be developed.
