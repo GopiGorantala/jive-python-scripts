@@ -22,7 +22,7 @@ class JiveManager:
                 json_response = json.loads(jive_response)
                 return json_response
         except Exception as e:
-            print e
+            raise e
         finally:
             pass
 
@@ -32,10 +32,9 @@ class JiveManager:
             jive_response = requests.post(url, data=params, headers=header, auth=(self.jiveUsername, self.jivePassword))
             jive_response = re.sub('\A.*[;]', "", jive_response.text).encode('utf8', 'ignore')
             json_response = json.loads(jive_response)
-            print json_response
+            return json_response
 
         except Exception as e:
-            print e
             raise e
         finally:
             pass
@@ -46,10 +45,9 @@ class JiveManager:
             jive_response = requests.post(url, data=params, headers=header, auth=(self.jiveUsername, self.jivePassword))
             jive_response = re.sub('\A.*[;]', "", jive_response.text).encode('utf8', 'ignore')
             json_response = json.loads(jive_response)
-            print json_response
+            return json_response
 
         except Exception as e:
-            print e
             raise e
         finally:
             pass
@@ -61,9 +59,8 @@ class JiveManager:
             jive_response = requests.put(url, data=params, headers=header, auth=(self.jiveUsername, self.jivePassword))
             jive_response = re.sub('\A.*[;]', "", jive_response.text).encode('utf8', 'ignore')
             json_response = json.loads(jive_response)
-            print json_response
+            return json_response
         except Exception as e:
-            print e
             raise e
         finally:
             pass
@@ -72,9 +69,8 @@ class JiveManager:
         try:
             header = {'content-type': 'application/json'}
             response = requests.delete(url, headers=header, auth=(self.jiveUsername, self.jivePassword))
-            print response
+            return response
         except Exception as e:
-            print e
             raise e
         finally:
             pass
@@ -91,14 +87,11 @@ class JiveManager:
 
     def delete_group_association(self, stream_id, jive_place_id):
         delete_association_url = self.jiveApiBaseUrl + "streams/" + stream_id + "/associations/groups/" + jive_place_id
-        print delete_association_url
-        print self.__delete(delete_association_url)
+        self.__delete(delete_association_url)
 
     def delete_space_association(self, stream_id, jive_place_id):
-        print "deleting association"
         delete_association_url = self.jiveApiBaseUrl + "streams/" + stream_id + "/associations/spaces/" + jive_place_id
-        print delete_association_url
-        print self.__delete(delete_association_url)
+        self.__delete(delete_association_url)
 
     def get_group_id(self, groupDisplayName):
         list_of_groups = []
@@ -108,7 +101,7 @@ class JiveManager:
             json_response = self.__get(group_url)
             for group in json_response['list']:
                 if group['displayName'] == groupDisplayName:
-                    print group['id']
+                    return group['id']
                     break;
             group_url = self.__next_page_url(json_response)
 
@@ -125,6 +118,7 @@ class JiveManager:
 
 
     def get_followers_of_place(self, placeId):
+        followers = []
         try:
             next_url = self.jiveApiBaseUrl+'places/'+placeId
             resource_json = self.__get(next_url)
@@ -134,31 +128,28 @@ class JiveManager:
             while next_url:
                 users = self.__get(next_url)
                 for user in users['list']:
-                    print user['displayName']
+                    followers.append(user['displayName'])
                 next_url = self.__next_page_url(users)
         except Exception as e:
-            print e
+            print(e)
 
     def add_expertise(self, personId):
         url = self.jiveApiBaseUrl+'people/'+personId+'/expertise/endorse'
         data = {'[{"name"}]'}
-
-        print self.__post(url, data)
+        self.__post(url, data)
 
 
     def create_association(self, stream_id, grp_url):
         try:
-            print "Adding user as email follower"
             uri_array = "[\"" + grp_url + "\"]"
             self.__post(self.jiveApiBaseUrl+"streams/"+stream_id+"/associations", uri_array)
-        except Exception, e:
-            print e
+        except Exception as e:
+            print(e)
             pass
 
     def add_member(self, group_member_service_url, user_url):
-        print "Adding user as member"
         post_data = '{"person":"' + user_url + '","state" : "member"}'
-        print self.__post(group_member_service_url, post_data)
+        self.__post(group_member_service_url, post_data)
 
     def force_add_users(self, group_id):
         
@@ -170,7 +161,6 @@ class JiveManager:
             for row in reader:
                 try:
                     username = row[0]
-                    print "Processing user " + username
                     user_data = self.__get(self.jiveApiBaseUrl + 'people/username/' + username)
                     self.add_member(group_member_service_url, user_data)
 
@@ -178,11 +168,10 @@ class JiveManager:
                     user_stream_data = self.__get(user_streams_url)
                     for stream in user_stream_data['list']:
                         if stream['name'] == "Email Watches" or stream['source'] == "watches":
-                            print stream['source'] + ', ' + stream['name']
                             stream_id = stream['id']
                             self.create_association(stream_id, group_place_service_url)
-                except Exception, e:
-                    print e
+                except Exception as e:
+                    print(e)
                     continue
 
     def get_group_followers(self, groupId):
@@ -192,10 +181,9 @@ class JiveManager:
             try:
                 resp = self.__get(next_url)
                 for usr in resp["list"]:
-                    print usr["displayName"]
                     followersIds.append(usr["id"]);
-            except Exception, e:
-                print e
+            except Exception as e:
+                print(e)
             next_url = self.__next_page_url(resp)
         return followersIds
 
@@ -207,18 +195,16 @@ class JiveManager:
                 resp = self.__get(next_url)
 
                 for membership in resp["list"]:
-                    print membership["person"]["id"]
                     memberIds.append(membership["person"]["id"])
-            except Exception, e:
-                print e
+            except Exception as e:
+                print(e)
             next_url = self.__next_page_url(resp)
         return memberIds
 
 
     def delete_membership(self, membership_id):
         uri = self.jiveApiBaseUrl + "members/" + membership_id
-        print uri
-        print requests.delete(uri, auth=(self.jiveUsername, self.jivePassword))
+        requests.delete(uri, auth=(self.jiveUsername, self.jivePassword))
 
     def check_streams(self):
         next_url = self.jiveApiBaseUrl + "people?count=100&startIndex=0"
@@ -239,15 +225,13 @@ class JiveManager:
                                 streamName = "Communications"
                             else:
                                 streamName = stream["name"]
-                            print "StreamName : "+streamName+", receiveEmail : "+str(stream['receiveEmails'])
+                            print("StreamName : "+streamName+", receiveEmail : "+str(stream['receiveEmails']))
 
-                        except Exception, e:
-                            print "Error on streams data"
-                            print e
+                        except Exception as e:
+                            print(e)
                             continue
-                except Exception, e:
-                    print "Error in person data"
-                    print e
+                except Exception as e:
+                    print(e)
                     continue
             next_url = self.__next_page_url(people_response)
 
@@ -258,18 +242,17 @@ class JiveManager:
             url = self.jiveApiBaseUrl+"people/" + user_id + "/streams"
             self.__post(url, stream)
         except Exception as e:
-            print e
+            print(e)
             raise e
 
     def get_all_jive_system_properties(self):
         admin_api_url = self.jiveApiBaseUrl + "admin/properties"
-        print admin_api_url
         next_url = admin_api_url
 
         while next_url:
             response_json = self.__get(next_url)
             for item in response_json["list"]:
-                print item
+                print(item)
             next_url = self.__next_page_url(response_json)
 
     def create_jive_sys_prop(self):
@@ -277,17 +260,14 @@ class JiveManager:
         for prop in properties:
             system_properties_api_url = self.jiveApiBaseUrl + "admin/properties"
             property_data = '{"name" : "' + prop[0] + '","value" : "' + prop[1] + '","type" : "property"}'
-            print property_data
-            print self.__post(system_properties_api_url, property_data)
+            self.__post(system_properties_api_url, property_data)
 
     def destroy_jive_system_prop(self):
         props = [] #properties to be destroyed
         for prop in props:
-            print prop
             admin_api_url = self.jiveApiBaseUrl + "admin/properties"
             delete_prop_url = admin_api_url + "/" + prop
-            print delete_prop_url
-            print self.__delete(delete_prop_url)
+            self.__delete(delete_prop_url)
 
     def get_all_groups(self):
         groupList = []
@@ -305,7 +285,7 @@ class JiveManager:
             groups_resp = self.__get(next_url)
             for group in groups_resp["list"]:
                 if group["groupType"] == "SECRET" or group["type"] == "PRIVATE":
-                    print group["displayName"] + "," + group["name"] + "," + group["groupType"]
+                    print(group["displayName"] + "," + group["name"] + "," + group["groupType"])
             next_url = self.__next_page_url(groups_resp)
 
     def remove_all_users_from_a_group(self):
@@ -327,23 +307,22 @@ class JiveManager:
         for username in usernames:
             user_url = self.jiveApiBaseUrl + "people/username/" + username
             user_data = self.__get(user_url)
-            print user_data["displayName"] + "," + str(user_data["jive"]["enabled"])
 
 
     def get_user_photos(self, username):
         user_url = self.jiveApiBaseUrl + "people/username/"+username
         user_data = self.__get(user_url)
-        print user_data['resources']['avatar']['ref']
-        print user_data['photos'][0]['value']
-        print user_data['photos'][1]['value']
+        print(user_data['resources']['avatar']['ref'])
+        print(user_data['photos'][0]['value'])
+        print(user_data['photos'][1]['value'])
 
     def create_jive_sys_prop1(self):
         properties = [] #array of properties
         for prop in properties:
             system_properties_api_url = self.jiveApiBaseUrl + "admin/properties"
             property_data = '{"name" : "' + prop[0] + '","value" : "' + prop[1] + '","type" : "property"}'
-            print property_data
-            print self.__post(system_properties_api_url, property_data)
+            print(property_data)
+            print(self.__post(system_properties_api_url, property_data))
 
     def get_all_users(self):
         users = []
@@ -351,7 +330,6 @@ class JiveManager:
         while next_url:
             resp = self.__get(next_url)
             for item in resp['list']:
-                print item['jive']['username']
                 users.append(item['jive']['username'])
             next_url = self.__next_page_url(resp)
         return users
@@ -363,14 +341,11 @@ class JiveManager:
             try:
                 content_pdf_link = content['resources']['html']['ref'] + ".pdf"
                 file_name = content['subject'] + "_" + content["id"]
-                print "Downloading " + file_name
                 content_json = requests.get(content_pdf_link, auth=(self.jiveUsername, self.jivePassword))
                 with open(file_name + ".pdf", "wb") as code:
                     code.write(content_json.content)
-                    print "Download for " + file_name + " successful"
-            except Exception, e:
-                print "Error in downloading " + file_name
-                print e
+            except Exception as e:
+                print(e)
                 continue
 
     def get_user_owned_groups(self, username):
@@ -380,12 +355,12 @@ class JiveManager:
         resp = self.__get(user_members_url)
         for object in resp["list"]:
             if object["state"] == "owner":
-                print object["group"]["displayName"]
+                print(object["group"]["displayName"])
 
     def create_groups(self, groupName, displayName, groupType):
         new_group_data = '{"type":"group","displayName" : "'+displayName+'","name" : "'+groupName+'","groupType" : "'+groupType+'"}'
         jive_places_api_url = self.jiveApiBaseUrl + "places"
-        print self.__post(jive_places_api_url, new_group_data)
+        self.__post(jive_places_api_url, new_group_data)
 
 
     def get_discussions_from_group(self, groupId):
@@ -393,39 +368,33 @@ class JiveManager:
         i = 0
         resp = self.__get(placeUrl)
         for item in resp["list"]:
-            i += 1
-            print i
-            print item["id"] + "," + item["type"]
-            print item["resources"]["self"]["ref"]
-            print self.__delete(item["resources"]["self"]["ref"])
+            print(item)
 
     def send_direct_message(self, userId):
         dmsUrl = self.jiveApiBaseUrl + "dms";
         data = '{ "content": { "text": "aero"},"participants": [ "api/core/v3/people/'+userId+'" ],"subject":"coffee."}'
-        print self.__post(dmsUrl, data)
+        self.__post(dmsUrl, data)
 
     def disable_user(self, userId):
         person_url = self.jiveApiBaseUrl + 'people/' + userId
         personData = self.__get(person_url)
-        print personData["jive"]["enabled"]
         personData["jive"]["enabled"] = False
         personData = json.dumps(personData)
-        print self.__put(person_url, personData)
+        self.__put(person_url, personData)
 
     def get_group_list_with_latest_activity(self):
         for group in self.get_all_groups():
             group_activities = self.__get(self.jiveApiBaseUrl+"places/"+group[0]+"/activities")
             try:
-                print group[2]+","+group_activities["list"][0]["updated"]
-            except Exception, e:
-                print group[2]+","+ str(e)
+                print(group[2]+","+group_activities["list"][0]["updated"])
+            except Exception as e:
+                print(group[2]+","+ str(e))
                 continue
 
     def search_group(self, group_url_name):
         group_search_url = self.jiveApiBaseUrl+"places?filter=search("+group_url_name+")";
         while group_search_url:
             groups = self.__get(group_search_url)
-            print groups
             for group in groups["list"]:
                 if group["displayName"] == group_url_name:
                     return group
@@ -434,7 +403,7 @@ class JiveManager:
     def create_content_in_place(self, placeId):
         url = self.jiveApiBaseUrl+"places/"+placeId+"/contents"
         dat = '{"content":{"type": "text/html","text": "<body><p>Some interesting content</p></body>"},"subject": "New Document","type": "document"}'
-        print self.__post(url, dat)
+        self.__post(url, dat)
 
     def update_group(self, group_id):
         group_uri = self.jiveApiBaseUrl+"places/"+group_id
