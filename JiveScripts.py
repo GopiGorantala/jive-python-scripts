@@ -18,7 +18,7 @@ class JiveManager:
             if jive_response.status_code == 500:
                 return "Error Response"
             else:
-                jive_response = re.sub('\A.*[;]', "", jive_response.text).encode('utf8', 'ignore')
+                jive_response = re.sub('\A.*[;]', "", jive_response.text)
                 json_response = json.loads(jive_response)
                 return json_response
         except Exception as e:
@@ -30,7 +30,7 @@ class JiveManager:
         try:
             header = {'content-type': 'application/json'}
             jive_response = requests.post(url, data=params, headers=header, auth=(self.jiveUsername, self.jivePassword))
-            jive_response = re.sub('\A.*[;]', "", jive_response.text).encode('utf8', 'ignore')
+            jive_response = re.sub('\A.*[;]', "", jive_response.text)
             json_response = json.loads(jive_response)
             return json_response
 
@@ -43,7 +43,7 @@ class JiveManager:
         try:
             header = {'content-type': 'application/json', 'X-Jive-Run-As' : 'userid '+runAsUserId+''}
             jive_response = requests.post(url, data=params, headers=header, auth=(self.jiveUsername, self.jivePassword))
-            jive_response = re.sub('\A.*[;]', "", jive_response.text).encode('utf8', 'ignore')
+            jive_response = re.sub('\A.*[;]', "", jive_response.text)
             json_response = json.loads(jive_response)
             return json_response
 
@@ -57,7 +57,7 @@ class JiveManager:
         try:
             header = {'content-type': 'application/json'}
             jive_response = requests.put(url, data=params, headers=header, auth=(self.jiveUsername, self.jivePassword))
-            jive_response = re.sub('\A.*[;]', "", jive_response.text).encode('utf8', 'ignore')
+            jive_response = re.sub('\A.*[;]', "", jive_response.text)
             json_response = json.loads(jive_response)
             return json_response
         except Exception as e:
